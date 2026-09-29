@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "executedTests": 11,
+  "checks": [
+    {
+      "project": "_Organized Desktop/01 Net Workspaces/.netcalendy",
+      "id": "ef1449fa0c77",
+      "command": [
+        "dotnet",
+        "run",
+        "--project",
+        "tests/NetCalendy.ScopeHarness",
+        "--configuration",
+        "Release"
+      ],
+      "cwd": "C:\\Users\\Owner\\Desktop\\AstraOrganized2\\astra-remaining-improvements\\stage\\ef1449fa0c77",
+      "environmentOverrides": {},
+      "startedAt": "2026-09-21T23:58:52.209664+00:00",
+      "status": "complete",
+      "log": "crud-b02-scope-harness.log",
+      "pid": 33336,
+      "exitCode": 0,
+      "passed": true,
+      "finishedAt": "2026-09-22T00:02:29.961167+00:00",
+      "elapsedSeconds": 217.72
+    }
+  ],
+  "limits": [
+    "Eleven handler cases compiled and executed actual linked production source on .NET10 with explicit repository and minimal MediatR contract doubles.",
+    "Original .NET9 solution/xUnit suites, ASP.NET/MediatR pipelines, EF Core, PostgreSQL and browser integration were not executed.",
+    "This relationship/state guard does not establish booking availability membership, timezone correctness, atomic double-booking prevention or tenant middleware behavior."
+  ]
+}

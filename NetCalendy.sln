@@ -1,0 +1,68 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCalendy.Domain", "src\NetCalendy.Domain\NetCalendy.Domain.csproj", "{11111111-0001-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCalendy.Application", "src\NetCalendy.Application\NetCalendy.Application.csproj", "{11111111-0002-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCalendy.Infrastructure", "src\NetCalendy.Infrastructure\NetCalendy.Infrastructure.csproj", "{11111111-0003-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCalendy.Api", "src\NetCalendy.Api\NetCalendy.Api.csproj", "{11111111-0004-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCalendy.Domain.Tests", "tests\NetCalendy.Domain.Tests\NetCalendy.Domain.Tests.csproj", "{11111111-0005-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCalendy.Application.Tests", "tests\NetCalendy.Application.Tests\NetCalendy.Application.Tests.csproj", "{11111111-0006-0000-0000-000000000000}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCalendy.Integration.Tests", "tests\NetCalendy.Integration.Tests\NetCalendy.Integration.Tests.csproj", "{11111111-0007-0000-0000-000000000000}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{22222222-0001-0000-0000-000000000000}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{22222222-0002-0000-0000-000000000000}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11111111-0001-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11111111-0001-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11111111-0001-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11111111-0001-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11111111-0002-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11111111-0002-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11111111-0002-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11111111-0002-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11111111-0003-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11111111-0003-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11111111-0003-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11111111-0003-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11111111-0004-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11111111-0004-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11111111-0004-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11111111-0004-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11111111-0005-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11111111-0005-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11111111-0005-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11111111-0005-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11111111-0006-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11111111-0006-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11111111-0006-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11111111-0006-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11111111-0007-0000-0000-000000000000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11111111-0007-0000-0000-000000000000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11111111-0007-0000-0000-000000000000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11111111-0007-0000-0000-000000000000}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{11111111-0001-0000-0000-000000000000} = {22222222-0001-0000-0000-000000000000}
+		{11111111-0002-0000-0000-000000000000} = {22222222-0001-0000-0000-000000000000}
+		{11111111-0003-0000-0000-000000000000} = {22222222-0001-0000-0000-000000000000}
+		{11111111-0004-0000-0000-000000000000} = {22222222-0001-0000-0000-000000000000}
+		{11111111-0005-0000-0000-000000000000} = {22222222-0002-0000-0000-000000000000}
+		{11111111-0006-0000-0000-000000000000} = {22222222-0002-0000-0000-000000000000}
+		{11111111-0007-0000-0000-000000000000} = {22222222-0002-0000-0000-000000000000}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <!-- Compile actual production files; do not copy the guarded algorithms. -->
+  <ItemGroup>
+    <Compile Include="../../src/NetCalendy.Domain/**/*.cs" Exclude="../../src/NetCalendy.Domain/bin/**;../../src/NetCalendy.Domain/obj/**" LinkBase="Production/Domain" />
+    <Compile Include="../../src/NetCalendy.Application/Common/ICurrentTenantService.cs" Link="Production/ICurrentTenantService.cs" />
+    <Compile Include="../../src/NetCalendy.Application/Common/IUnitOfWork.cs" Link="Production/IUnitOfWork.cs" />
+    <Compile Include="../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingCommand.cs" Link="Production/CreateBookingCommand.cs" />
+    <Compile Include="../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs" Link="Production/CreateBookingHandler.cs" />
+    <Compile Include="../../src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsQuery.cs" Link="Production/GetAvailableSlotsQuery.cs" />
+    <Compile Include="../../src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs" Link="Production/GetAvailableSlotsHandler.cs" />
+  </ItemGroup>
+</Project>

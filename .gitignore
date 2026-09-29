@@ -1,0 +1,30 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.userprefs
+appsettings.*.local.json
+
+## Secrets
+**/*.pfx
+**/*.p12
+.env
+.env.local
+
+## EF Migrations (keep the Migrations folder tracked, but ignore lock files)
+*.ldf
+*.mdf
+
+## Node / React
+web/node_modules/
+web/dist/
+web/.vite/
+
+## Docker
+.dockerignore
+
+## OS
+.DS_Store
+Thumbs.db
