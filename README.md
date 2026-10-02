@@ -2,6 +2,8 @@
 
 A production-grade Calendly-style booking SaaS built with C# / .NET 9 and React.
 
+> Learning this codebase? Start with the time-and-concurrency course at [astraupskill/course/LEARNING-PATH.md](astraupskill/course/LEARNING-PATH.md).
+
 ## Architecture
 
 ```
