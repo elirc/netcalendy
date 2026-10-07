@@ -27,6 +27,22 @@ than assuming separately constructed objects have different identity. Next
 inspect active state and the repository call log. Finally inspect result mapping
 only if handler behavior is correct and the observed HTTP response differs.
 
+## What else exists, and what runs
+
+Counted from `[Fact]`/`[Theory]` attributes (no `[InlineData]` rows exist):
+
+| Project | Tests | Runs without Docker? |
+|---|---|---|
+| `tests/NetCalendy.Domain.Tests` | 14 (BookingAggregateTests 8, ScheduleAggregateTests 6) | Yes |
+| `tests/NetCalendy.Application.Tests` | 5 (CreateBookingHandlerTests 3, CreateEventTypeHandlerTests 2) | **Does not compile**: `DependencyInjection.cs:21` calls `AddValidatorsFromAssembly`, but `NetCalendy.Application.csproj` references only `FluentValidation`, not `FluentValidation.DependencyInjectionExtensions` |
+| `tests/NetCalendy.Integration.Tests` | 7 (CreateBookingEndpointTests 3, EventTypesEndpointTests 4) | No — Testcontainers Postgres |
+| `tests/NetCalendy.ScopeHarness` | 11 runtime cases (`Program.cs` `Run(...)` calls) | Yes (.NET 10 SDK) |
+
+None of the existing xUnit tests covers the scope guard; the harness is its
+only evidence. Note too that the harness's `ICurrentTenantService` double
+always returns a tenant (`Program.cs:126`), so it cannot show what happens when
+the JWT claim is absent — see 06, finding A.
+
 Do not infer PostgreSQL behavior from these doubles. Follow-up integration tests
 should exercise tenant resolution, EF tracking and query filters, controller
 mapping, MediatR validation and two simultaneous bookings. The application still

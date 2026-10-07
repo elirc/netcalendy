@@ -72,7 +72,7 @@ public void Create_WithValidData_ShouldRaiseBookingCreatedEvent()
 }
 ```
 
-**Self-check:** `DomainEvents` comes from `AggregateRoot<TId>` via the `IHasDomainEvents` interface. See [`src/NetCalendy.Domain/Common/AggregateRoot.cs`](../../src/NetCalendy.Domain/Common/AggregateRoot.cs).
+**Self-check:** `DomainEvents` comes from `AggregateRoot<TId>` via the `IHasDomainEvents` interface. See [`src/NetCalendy.Domain/Common/AggregateRoot.cs`](../../../src/NetCalendy.Domain/Common/AggregateRoot.cs).
 
 ---
 
@@ -103,7 +103,7 @@ public void Email_Create_WithValidEmail_ShouldNormalizeLowercase(string input)
 }
 ```
 
-**Pattern reference:** [`src/NetCalendy.Domain/Users/Email.cs`](../../src/NetCalendy.Domain/Users/Email.cs)
+**Pattern reference:** [`src/NetCalendy.Domain/Users/Email.cs`](../../../src/NetCalendy.Domain/Users/Email.cs)
 
 ---
 
@@ -196,6 +196,8 @@ public async Task POST_bookings_WhenSlotTaken_Returns409()
 
 **Why this matters:** This test would catch a regression if the conflict-check query changes or `ConflictsWith()` logic is modified.
 
+**Expect this test to fail first (verified 2026-10-06).** `ResultExtensions.cs:28` maps an error to 409 only if its code contains `.Conflict`, `Taken` or `AlreadyCancelled`; the handler's code is `Booking.TimeConflict`, which matches none of them, so today the second request returns 400. Also note `SeedActiveEventTypeAsync` and the `bearerToken:` overload are sketches — the real helpers are `SeedData` and `DefaultRequestHeaders.Authorization` in `CreateBookingEndpointTests.cs`. See `astraupskill/06-SOLUTIONS-AND-REVIEW.md`, finding B.
+
 ---
 
 ## Recipe 6: Integration Test — Auth Required
@@ -256,4 +258,4 @@ public async Task ValidationBehavior_WhenValidationFails_ThrowsValidationExcepti
 }
 ```
 
-**Pattern reference:** [`src/NetCalendy.Application/Common/Behaviors/ValidationBehavior.cs`](../../src/NetCalendy.Application/Common/Behaviors/ValidationBehavior.cs), [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs`](../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs)
+**Pattern reference:** [`src/NetCalendy.Application/Common/Behaviors/ValidationBehavior.cs`](../../../src/NetCalendy.Application/Common/Behaviors/ValidationBehavior.cs), [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs`](../../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs)

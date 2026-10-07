@@ -47,7 +47,7 @@ Domain validation in `Booking.Create()`, business rules in `CreateBookingHandler
 3. Direct `_context` access in the controller couples HTTP and persistence layers.
 4. `new Booking { ... }` skips the `Booking.Create()` factory — no domain events raised, no invariant checking.
 
-**Pattern reference:** [`src/NetCalendy.Domain/Bookings/Booking.cs`](../../src/NetCalendy.Domain/Bookings/Booking.cs), [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs`](../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs)
+**Pattern reference:** [`src/NetCalendy.Domain/Bookings/Booking.cs`](../../../src/NetCalendy.Domain/Bookings/Booking.cs), [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs`](../../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs)
 
 ---
 
@@ -87,7 +87,7 @@ public async Task<Result<BookingDto>> Handle(GetBookingQuery query, Cancellation
 
 **Bonus question:** What does `ExceptionHandlingMiddleware` do with `NotFoundException`? Does it exist in this repo? (Answer: No — `NotFound` returns `Result.Failure`, never throws. The middleware handles only `ValidationException` and unexpected exceptions.)
 
-**Pattern reference:** [`src/NetCalendy.Domain/Common/Result.cs`](../../src/NetCalendy.Domain/Common/Result.cs), [`src/NetCalendy.Application/Bookings/Queries/GetBooking/GetBookingHandler.cs`](../../src/NetCalendy.Application/Bookings/Queries/GetBooking/GetBookingHandler.cs)
+**Pattern reference:** [`src/NetCalendy.Domain/Common/Result.cs`](../../../src/NetCalendy.Domain/Common/Result.cs), [`src/NetCalendy.Application/Bookings/Queries/GetBooking/GetBookingHandler.cs`](../../../src/NetCalendy.Application/Bookings/Queries/GetBooking/GetBookingHandler.cs)
 
 ---
 
@@ -132,7 +132,7 @@ public Result Cancel(string? reason)
 3. The domain event (`BookingCancelledEvent`) is never raised in the bad version — downstream side effects silently don't happen.
 4. `public set` means EF Core doesn't need a private setter — but it also means *any code in any layer* can mutate state without going through business logic.
 
-**Pattern reference:** [`src/NetCalendy.Domain/Bookings/Booking.cs`](../../src/NetCalendy.Domain/Bookings/Booking.cs), [`src/NetCalendy.Domain/Common/AggregateRoot.cs`](../../src/NetCalendy.Domain/Common/AggregateRoot.cs)
+**Pattern reference:** [`src/NetCalendy.Domain/Bookings/Booking.cs`](../../../src/NetCalendy.Domain/Bookings/Booking.cs), [`src/NetCalendy.Domain/Common/AggregateRoot.cs`](../../../src/NetCalendy.Domain/Common/AggregateRoot.cs)
 
 ---
 
@@ -171,7 +171,7 @@ var booking = Booking.Create(tenantId, eventTypeId, hostUserId, ...); // CS: can
 2. A raw `Guid` can be any ID. A `UserId` is self-documenting and type-safe.
 3. Strong IDs allow repository methods to be typed correctly: `GetByIdAsync(UserId id)` won't accidentally accept an `EventTypeId`.
 
-**Pattern reference:** [`src/NetCalendy.Domain/Users/UserId.cs`](../../src/NetCalendy.Domain/Users/UserId.cs), [`src/NetCalendy.Domain/Bookings/BookingId.cs`](../../src/NetCalendy.Domain/Bookings/BookingId.cs)
+**Pattern reference:** [`src/NetCalendy.Domain/Users/UserId.cs`](../../../src/NetCalendy.Domain/Users/UserId.cs), [`src/NetCalendy.Domain/Bookings/BookingId.cs`](../../../src/NetCalendy.Domain/Bookings/BookingId.cs)
 
 ---
 
@@ -198,7 +198,7 @@ public async Task<EventType?> GetByIdAsync(EventTypeId id, CancellationToken ct)
 2. For SaaS, tenant isolation is a **security property**, not a performance optimization. Missing it is a data breach waiting to happen.
 3. The bad version looks correct until you test with two tenants.
 
-**Pattern reference:** [`src/NetCalendy.Infrastructure/Persistence/Repositories/EventTypeRepository.cs`](../../src/NetCalendy.Infrastructure/Persistence/Repositories/EventTypeRepository.cs), `03-validation-auth-and-permissions.md` IDOR section
+**Pattern reference:** [`src/NetCalendy.Infrastructure/Persistence/Repositories/EventTypeRepository.cs`](../../../src/NetCalendy.Infrastructure/Persistence/Repositories/EventTypeRepository.cs), `03-validation-auth-and-permissions.md` IDOR section
 
 ---
 
@@ -227,7 +227,7 @@ var eventType = await _eventTypes.GetByIdAsync(booking.EventTypeId, ct);
 2. EF Core respects `CancellationToken` — passing it allows the query to be abandoned. Not passing it means the full query always runs.
 3. The pattern is "pass `ct` to every async call" — one miss breaks the whole chain.
 
-**Pattern reference:** [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs`](../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs) — all 4 async calls pass `ct`.
+**Pattern reference:** [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs`](../../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs) — all 4 async calls pass `ct`.
 
 ---
 
@@ -263,7 +263,7 @@ public class CreateBookingValidator : AbstractValidator<CreateBookingCommand>
 2. Validating a domain entity means the entity must be constructible in an invalid state (you need an instance to validate). The better design makes invalid instances impossible via factory methods.
 3. `DateTimeOffset.UtcNow` in a `AbstractValidator` constructor is evaluated once at startup — the validator would always use the start time from when the app launched.
 
-**Pattern reference:** [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs`](../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs), [`src/NetCalendy.Application/DependencyInjection.cs`](../../src/NetCalendy.Application/DependencyInjection.cs)
+**Pattern reference:** [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs`](../../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs), [`src/NetCalendy.Application/DependencyInjection.cs`](../../../src/NetCalendy.Application/DependencyInjection.cs)
 
 ---
 
@@ -307,4 +307,4 @@ public async Task POST_bookings_WithValidSlot_Returns201AndCreatesBooking()
 3. No assertion on side effects — the booking might not be saved.
 4. The test name `Creates201` doesn't describe what scenario was tested — a new developer can't tell what this test covers without reading the body.
 
-**Pattern reference:** [`tests/NetCalendy.Integration.Tests/`](../../tests/NetCalendy.Integration.Tests/), [`tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs`](../../tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs)
+**Pattern reference:** [`tests/NetCalendy.Integration.Tests/`](../../../tests/NetCalendy.Integration.Tests/), [`tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs`](../../../tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs)

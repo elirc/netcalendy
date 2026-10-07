@@ -22,7 +22,7 @@ Each kata presents a fictional PR. Your job: identify blocking issues, important
 + foreach (var slot in schedule.GetAvailableSlots(date, eventType.Duration.Minutes + eventType.BufferMinutes))
 ```
 
-**Resembles:** [`src/NetCalendy.Domain/EventTypes/EventType.cs`](../../src/NetCalendy.Domain/EventTypes/EventType.cs), [`src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs`](../../src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs)
+**Resembles:** [`src/NetCalendy.Domain/EventTypes/EventType.cs`](../../../src/NetCalendy.Domain/EventTypes/EventType.cs), [`src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs`](../../../src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs)
 
 **Expected findings:**
 
@@ -63,7 +63,7 @@ Each kata presents a fictional PR. Your job: identify blocking issues, important
 + }
 ```
 
-**Resembles:** [`src/NetCalendy.Api/Controllers/EventTypesController.cs`](../../src/NetCalendy.Api/Controllers/EventTypesController.cs)
+**Resembles:** [`src/NetCalendy.Api/Controllers/EventTypesController.cs`](../../../src/NetCalendy.Api/Controllers/EventTypesController.cs)
 
 **Expected findings:**
 
@@ -97,7 +97,7 @@ Each kata presents a fictional PR. Your job: identify blocking issues, important
 + );
 ```
 
-**Resembles:** [`src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs`](../../src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs)
+**Resembles:** [`src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs`](../../../src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs)
 
 **Expected findings:**
 
@@ -129,7 +129,7 @@ Each kata presents a fictional PR. Your job: identify blocking issues, important
 +     bookingResult.Value.StartTime);
 ```
 
-**Resembles:** [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs`](../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs)
+**Resembles:** [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs`](../../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs)
 
 **Expected findings:**
 
@@ -171,7 +171,7 @@ Each kata presents a fictional PR. Your job: identify blocking issues, important
 + var user = await users.GetBySlugAsync(userSlug, tenantId); // IUserRepository has no GetBySlugAsync!
 ```
 
-**Resembles:** [`src/NetCalendy.Api/Controllers/BookingsController.cs`](../../src/NetCalendy.Api/Controllers/BookingsController.cs)
+**Resembles:** [`src/NetCalendy.Api/Controllers/BookingsController.cs`](../../../src/NetCalendy.Api/Controllers/BookingsController.cs)
 
 **Expected findings:**
 

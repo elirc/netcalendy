@@ -14,8 +14,8 @@ Twenty tickets designed for a junior engineer making their first contributions t
 `UpdateEventTypeCommand` has no `AbstractValidator` registered. A user can send an empty name or negative duration and the handler will attempt to save it. The domain will catch some of these (via `Duration.Create`), but the user gets a 500 instead of a 400.
 
 **Files to read first:**
-- [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs`](../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs) — follow this pattern exactly
-- [`src/NetCalendy.Application/EventTypes/Commands/UpdateEventType/UpdateEventTypeCommand.cs`](../../src/NetCalendy.Application/EventTypes/Commands/UpdateEventType/UpdateEventTypeCommand.cs) — the command you're validating
+- [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs`](../../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs) — follow this pattern exactly
+- [`src/NetCalendy.Application/EventTypes/Commands/UpdateEventType/UpdateEventTypeCommand.cs`](../../../src/NetCalendy.Application/EventTypes/Commands/UpdateEventType/UpdateEventTypeCommand.cs) — the command you're validating
 
 **What to create:**  
 `src/NetCalendy.Application/EventTypes/Commands/UpdateEventType/UpdateEventTypeValidator.cs`
@@ -43,8 +43,8 @@ Twenty tickets designed for a junior engineer making their first contributions t
 `UpdateEventTypeHandler` likely returns an error if the event type isn't found, but review the actual error code. It should return `Error.NotFound("EventType", id)` to produce a 404 response. Verify this is the case, and fix if not.
 
 **Files to read:**
-- [`src/NetCalendy.Application/EventTypes/Commands/UpdateEventType/UpdateEventTypeHandler.cs`](../../src/NetCalendy.Application/EventTypes/Commands/UpdateEventType/UpdateEventTypeHandler.cs)
-- [`src/NetCalendy.Api/Extensions/ResultExtensions.cs`](../../src/NetCalendy.Api/Extensions/ResultExtensions.cs) — how error codes map to HTTP status
+- [`src/NetCalendy.Application/EventTypes/Commands/UpdateEventType/UpdateEventTypeHandler.cs`](../../../src/NetCalendy.Application/EventTypes/Commands/UpdateEventType/UpdateEventTypeHandler.cs)
+- [`src/NetCalendy.Api/Extensions/ResultExtensions.cs`](../../../src/NetCalendy.Api/Extensions/ResultExtensions.cs) — how error codes map to HTTP status
 
 **Definition of done:**
 - [ ] `PUT /api/event-types/{nonexistent-id}` returns HTTP 404
@@ -62,8 +62,8 @@ Twenty tickets designed for a junior engineer making their first contributions t
 Add a middleware that generates (or reads from the incoming `X-Request-Id` header) a correlation ID and attaches it to every response. This enables tracing a specific request through logs.
 
 **Files to read first:**
-- [`src/NetCalendy.Api/Middleware/TenantResolutionMiddleware.cs`](../../src/NetCalendy.Api/Middleware/TenantResolutionMiddleware.cs) — use as middleware template
-- [`src/NetCalendy.Api/Program.cs`](../../src/NetCalendy.Api/Program.cs) — where to register the middleware
+- [`src/NetCalendy.Api/Middleware/TenantResolutionMiddleware.cs`](../../../src/NetCalendy.Api/Middleware/TenantResolutionMiddleware.cs) — use as middleware template
+- [`src/NetCalendy.Api/Program.cs`](../../../src/NetCalendy.Api/Program.cs) — where to register the middleware
 
 **What to create:**  
 `src/NetCalendy.Api/Middleware/CorrelationIdMiddleware.cs`
@@ -91,7 +91,7 @@ Add a middleware that generates (or reads from the incoming `X-Request-Id` heade
 `CreateEventTypeCommand` accepts a `color` string. Currently there's no validation — a user can pass any string. It should be validated to be a valid hex color code: `#RRGGBB`.
 
 **Files:**
-- [`src/NetCalendy.Application/EventTypes/Commands/CreateEventType/CreateEventTypeValidator.cs`](../../src/NetCalendy.Application/EventTypes/Commands/CreateEventType/CreateEventTypeValidator.cs)
+- [`src/NetCalendy.Application/EventTypes/Commands/CreateEventType/CreateEventTypeValidator.cs`](../../../src/NetCalendy.Application/EventTypes/Commands/CreateEventType/CreateEventTypeValidator.cs)
 
 **Add rule:**
 ```csharp
@@ -117,9 +117,9 @@ RuleFor(c => c.Color)
 `GET /api/event-types` returns all event types. Add an optional `?isActive=true/false` query parameter to filter by active status.
 
 **Files to touch:**
-- [`src/NetCalendy.Application/EventTypes/Queries/ListEventTypes/ListEventTypesQuery.cs`](../../src/NetCalendy.Application/EventTypes/Queries/ListEventTypes/ListEventTypesQuery.cs) — add optional `bool? IsActive` parameter
-- [`src/NetCalendy.Application/EventTypes/Queries/ListEventTypes/ListEventTypesHandler.cs`](../../src/NetCalendy.Application/EventTypes/Queries/ListEventTypes/ListEventTypesHandler.cs) — apply filter if present
-- [`src/NetCalendy.Api/Controllers/EventTypesController.cs`](../../src/NetCalendy.Api/Controllers/EventTypesController.cs) — pass query param
+- [`src/NetCalendy.Application/EventTypes/Queries/ListEventTypes/ListEventTypesQuery.cs`](../../../src/NetCalendy.Application/EventTypes/Queries/ListEventTypes/ListEventTypesQuery.cs) — add optional `bool? IsActive` parameter
+- [`src/NetCalendy.Application/EventTypes/Queries/ListEventTypes/ListEventTypesHandler.cs`](../../../src/NetCalendy.Application/EventTypes/Queries/ListEventTypes/ListEventTypesHandler.cs) — apply filter if present
+- [`src/NetCalendy.Api/Controllers/EventTypesController.cs`](../../../src/NetCalendy.Api/Controllers/EventTypesController.cs) — pass query param
 
 **Definition of done:**
 - [ ] `GET /api/event-types?isActive=true` returns only active types
@@ -163,7 +163,7 @@ grep -r "WithMessage" src/NetCalendy.Application/
 `POST /api/bookings/cancel` accepts a `reason` but the response doesn't include it. Update the response to include `cancellationReason`.
 
 **Files:**
-- [`src/NetCalendy.Application/Bookings/Commands/CancelBooking/CancelBookingHandler.cs`](../../src/NetCalendy.Application/Bookings/Commands/CancelBooking/CancelBookingHandler.cs)
+- [`src/NetCalendy.Application/Bookings/Commands/CancelBooking/CancelBookingHandler.cs`](../../../src/NetCalendy.Application/Bookings/Commands/CancelBooking/CancelBookingHandler.cs)
 - The response record — add `CancellationReason` property
 
 **Definition of done:**
@@ -181,8 +181,8 @@ grep -r "WithMessage" src/NetCalendy.Application/
 `Schedule.GetAvailableSlots(date, minutes)` should return an empty list if `date` is a weekend (assuming default Mon–Fri rules). Write a unit test that verifies this.
 
 **Files:**
-- [`tests/NetCalendy.Domain.Tests/`](../../tests/NetCalendy.Domain.Tests/) — add test file
-- [`src/NetCalendy.Domain/Schedules/Schedule.cs`](../../src/NetCalendy.Domain/Schedules/Schedule.cs) — method to test
+- [`tests/NetCalendy.Domain.Tests/`](../../../tests/NetCalendy.Domain.Tests/) — add test file
+- [`src/NetCalendy.Domain/Schedules/Schedule.cs`](../../../src/NetCalendy.Domain/Schedules/Schedule.cs) — method to test
 
 **Definition of done:**
 - [ ] Test passes with a Saturday input
@@ -201,7 +201,7 @@ grep -r "WithMessage" src/NetCalendy.Application/
 `EventType.Name` has a max length enforced in EF configuration (column length). But the domain itself doesn't enforce this. A 1000-character name would fail with a DB truncation error, not a clear domain error.
 
 **Files:**
-- [`src/NetCalendy.Domain/EventTypes/EventType.cs`](../../src/NetCalendy.Domain/EventTypes/EventType.cs)
+- [`src/NetCalendy.Domain/EventTypes/EventType.cs`](../../../src/NetCalendy.Domain/EventTypes/EventType.cs)
 - `EventTypeName` value object if it exists, or add the check in `EventType.Create()`
 
 **Add:** If `name.Length > 100`, return `Result.Failure(Error.Validation("EventType.NameTooLong", "Name must be 100 characters or fewer."))`.
@@ -244,9 +244,9 @@ Add integration tests that verify protected endpoints return 401 when called wit
 The `Booking` entity should have a `CreatedAt` property. Add it (if not already present) and include it in `BookingDto`.
 
 **Files:**
-- [`src/NetCalendy.Domain/Bookings/Booking.cs`](../../src/NetCalendy.Domain/Bookings/Booking.cs) — add `public DateTimeOffset CreatedAt { get; private set; }`
+- [`src/NetCalendy.Domain/Bookings/Booking.cs`](../../../src/NetCalendy.Domain/Bookings/Booking.cs) — add `public DateTimeOffset CreatedAt { get; private set; }`
 - Set it in the `Create` factory: `CreatedAt = DateTimeOffset.UtcNow`
-- [`src/NetCalendy.Application/Bookings/Queries/GetBooking/BookingDto.cs`](../../src/NetCalendy.Application/Bookings/Queries/GetBooking/BookingDto.cs) — add the field
+- [`src/NetCalendy.Application/Bookings/Queries/GetBooking/GetBookingQuery.cs`](../../../src/NetCalendy.Application/Bookings/Queries/GetBooking/GetBookingQuery.cs) (`BookingDto` is declared at line 8) — add the field
 
 **Note:** Adding a column requires an EF migration. Document the `dotnet ef migrations add` command to run.
 
@@ -265,7 +265,7 @@ The `Booking` entity should have a `CreatedAt` property. Add it (if not already 
 `ListEventTypesHandler` returns event types in database insertion order. Sort them by `Name` ascending.
 
 **File:**
-- [`src/NetCalendy.Application/EventTypes/Queries/ListEventTypes/ListEventTypesHandler.cs`](../../src/NetCalendy.Application/EventTypes/Queries/ListEventTypes/ListEventTypesHandler.cs) or the repository method
+- [`src/NetCalendy.Application/EventTypes/Queries/ListEventTypes/ListEventTypesHandler.cs`](../../../src/NetCalendy.Application/EventTypes/Queries/ListEventTypes/ListEventTypesHandler.cs) or the repository method
 
 **Add:** `.OrderBy(e => e.Name)` to the query.
 
@@ -285,7 +285,7 @@ The `Booking` entity should have a `CreatedAt` property. Add it (if not already 
 `appsettings.json` contains a placeholder JWT key that must be replaced. A new developer who clones the repo won't know this. Add a comment in `appsettings.json` and update `README.md` with setup instructions.
 
 **Files:**
-- [`src/NetCalendy.Api/appsettings.json`](../../src/NetCalendy.Api/appsettings.json)
+- [`src/NetCalendy.Api/appsettings.json`](../../../src/NetCalendy.Api/appsettings.json)
 - Root `README.md`
 
 **Add instructions for:**
@@ -309,7 +309,7 @@ dotnet user-secrets set "Jwt:Key" "your-secret-key-at-least-32-chars" --project 
 `CreateBookingResponse` doesn't include the initial `BookingStatus`. Add it so callers can confirm the booking is in `Scheduled` state.
 
 **Files:**
-- [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs`](../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs) — update response construction
+- [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs`](../../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs) — update response construction
 - `CreateBookingResponse` record — add `Status` field
 
 **Definition of done:**
@@ -354,7 +354,7 @@ Event type slugs must be unique per host. Currently this is enforced only at the
 **Skills:** HTTP status codes, extension methods
 
 **Description:**  
-[`src/NetCalendy.Api/Extensions/ResultExtensions.cs`](../../src/NetCalendy.Api/Extensions/ResultExtensions.cs) maps error codes to HTTP status. Errors with suffix `Forbidden` currently fall through to the default 400 case. They should return 403.
+[`src/NetCalendy.Api/Extensions/ResultExtensions.cs`](../../../src/NetCalendy.Api/Extensions/ResultExtensions.cs) maps error codes to HTTP status. Errors with suffix `Forbidden` currently fall through to the default 400 case. They should return 403.
 
 **Fix:** Add a case:
 ```csharp

@@ -15,7 +15,7 @@ This repo implements logs (Serilog). Metrics and traces are not yet implemented.
 
 ## Serilog: Current Setup
 
-**Configuration:** [`src/NetCalendy.Api/appsettings.json`](../../src/NetCalendy.Api/appsettings.json) and [`src/NetCalendy.Api/Program.cs`](../../src/NetCalendy.Api/Program.cs)
+**Configuration:** [`src/NetCalendy.Api/appsettings.json`](../../../src/NetCalendy.Api/appsettings.json) and [`src/NetCalendy.Api/Program.cs`](../../../src/NetCalendy.Api/Program.cs)
 
 **Sinks configured:**
 - Console (structured JSON in production, pretty-print in development)
@@ -33,7 +33,7 @@ Information: Handling {RequestName}
 Information: Handled {RequestName} in {ElapsedMs}ms
 Warning: (on slow requests — add this)
 ```
-File: [`src/NetCalendy.Application/Common/Behaviors/LoggingBehavior.cs`](../../src/NetCalendy.Application/Common/Behaviors/LoggingBehavior.cs)
+File: [`src/NetCalendy.Application/Common/Behaviors/LoggingBehavior.cs`](../../../src/NetCalendy.Application/Common/Behaviors/LoggingBehavior.cs)
 
 ---
 

@@ -11,7 +11,7 @@ Twelve tickets requiring cross-cutting judgment: design decisions, tradeoffs, an
 **Skills:** Repository layer, DDD, security
 
 **Problem:**  
-`RepositoryBase.GetByIdAsync(id)` queries by ID only — no tenant scope. Any authenticated user can read any entity by guessing its GUID. See [`src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs`](../../src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs).
+`RepositoryBase.GetByIdAsync(id)` queries by ID only — no tenant scope. Any authenticated user can read any entity by guessing its GUID. See [`src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs`](../../../src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs).
 
 **Your task:**  
 Add tenant scope to all `GetById` queries. Two approaches:
@@ -25,7 +25,7 @@ After loading, check `entity.TenantId == currentTenant.TenantId`. Return 404 if 
 **Design question to answer first:** Should the repository layer or the application layer be responsible for tenant scope? Write your reasoning in the PR description.
 
 **Files to touch:**
-- [`src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs`](../../src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs)
+- [`src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs`](../../../src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs)
 - `GetBookingHandler`, `GetEventTypeHandler`, `GetScheduleHandler`
 
 **Definition of done:**
@@ -143,7 +143,7 @@ RuleFor(c => c.InviteeTimezone)
 - `POST /api/bookings/cancel` — 30 requests/minute per IP (brute-force protection on token)
 
 **Files:**
-- [`src/NetCalendy.Api/Program.cs`](../../src/NetCalendy.Api/Program.cs) — register and configure
+- [`src/NetCalendy.Api/Program.cs`](../../../src/NetCalendy.Api/Program.cs) — register and configure
 - Controllers — add `[EnableRateLimiting("...")]` attribute
 
 **Design decision:** Should rate limits be per-IP, per-tenant, or per-user? Document your reasoning.
@@ -279,7 +279,7 @@ app.Use(async (ctx, next) => {
 ```
 
 **Files:**
-- [`src/NetCalendy.Api/Program.cs`](../../src/NetCalendy.Api/Program.cs)
+- [`src/NetCalendy.Api/Program.cs`](../../../src/NetCalendy.Api/Program.cs)
 
 **Definition of done:**
 - [ ] Seq shows `TenantId` and `UserId` on every authenticated request log

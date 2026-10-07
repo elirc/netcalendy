@@ -16,6 +16,11 @@ An invitee books anonymously: `POST /api/bookings` carries an event-type ID,
 a host-user ID, a start time, and the invitee's details. No login — the
 [README](../../README.md) API table marks it public. So whatever stops a
 double booking cannot live in authentication; it must live in the data path.
+(Caveat verified 2026-10-06: the handler still needs a `tenant_id` JWT claim to
+resolve the tenant, so a truly token-less request fails with a 500 before
+reaching any of the code below. See
+[06-SOLUTIONS-AND-REVIEW](../06-SOLUTIONS-AND-REVIEW.md), finding A. The race
+in this tour applies to any caller who does carry the claim.)
 
 ## 1. The client asks for slots, then posts one
 
@@ -34,9 +39,13 @@ write — the API, the handler, a transaction, or the database?
 - `src/NetCalendy.Api/Controllers/BookingsController.cs:19-28` — the POST is
   `[AllowAnonymous]` and forwards straight to MediatR. It advertises a 409
   (`ProducesResponseType(typeof(ProblemDetails), 409)`) but produces none
-  itself.
+  itself — and neither does the mapper: `ResultExtensions.cs:28` sends a code
+  to 409 only if it contains `.Conflict`, and `Booking.TimeConflict` does not,
+  so a refused double booking actually returns **400**.
 - `src/NetCalendy.Api/Middleware/TenantResolutionMiddleware.cs` — resolves
-  `X-Tenant-Slug`/subdomain to a tenant ID. Tenancy scoping, not concurrency.
+  `X-Tenant-Slug`/subdomain to a tenant ID and stores it in
+  `HttpContext.Items`, which nothing reads (`CurrentTenantService` uses the JWT
+  claim). Tenancy scoping, not concurrency.
 - FluentValidation (`CreateBookingValidator.cs`) checks shape — email format,
   required fields — never other rows.
 
@@ -130,8 +139,9 @@ as a concurrency guarantee. There isn't one.
   catching a deleted guard.
 - `tests/NetCalendy.Integration.Tests/BookingsEndpoints/CreateBookingEndpointTests.cs` —
   three cases through real HTTP and real Postgres (Testcontainers), but none
-  posts the same slot twice — not even sequentially. The 409 path has never
-  been exercised end to end, let alone concurrently.
+  posts the same slot twice — not even sequentially. The conflict path has
+  never been exercised end to end, let alone concurrently — which is how its
+  400-instead-of-409 mapping (§2) went unnoticed.
 
 Honest strength statement: *the suites prove the handler refuses a conflict
 it can see; no test in this repository proves two simultaneous requests

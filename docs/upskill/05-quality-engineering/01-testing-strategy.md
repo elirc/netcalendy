@@ -37,7 +37,7 @@
 - Handler orchestration
 - HTTP status codes
 
-**Example:** [`tests/NetCalendy.Domain.Tests/BookingTests/BookingAggregateTests.cs`](../../tests/NetCalendy.Domain.Tests/BookingTests/BookingAggregateTests.cs)
+**Example:** [`tests/NetCalendy.Domain.Tests/BookingTests/BookingAggregateTests.cs`](../../../tests/NetCalendy.Domain.Tests/BookingTests/BookingAggregateTests.cs)
 
 ---
 
@@ -85,8 +85,8 @@ result.Error.Code.Should().Be("Booking.NotFound");
 - Edge cases in domain logic (too slow, too expensive — cover those in unit tests)
 
 **Key files:**
-- [`tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs`](../../tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs) — Testcontainers setup
-- [`tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs`](../../tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs) — JWT generation
+- [`tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs`](../../../tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs) — Testcontainers setup
+- [`tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs`](../../../tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs) — JWT generation
 
 ---
 

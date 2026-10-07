@@ -16,12 +16,22 @@ produce the same EventType.NotFound result. An inactive matching event type
 produces EventType.Inactive, and availability now agrees with booking on that
 state rule. Legal booking and missing-schedule behavior remain visible in tests.
 
-Study the chapters in order, keeping the source open. First draw the route,
-handler, aggregate and repository path. Then predict which downstream calls
-are allowed for each input tuple. Compare the original snapshots with the
-guard, run the focused harness, and attempt the practice before opening its
-separate answers. The trace table provides a review aid rather than a claim
-that every component of the web application was exercised.
+## Reading order
+
+1. [01-CODEBASE-MAP](01-CODEBASE-MAP.md) — the two public paths, with line numbers.
+2. [02-CONCEPTS](02-CONCEPTS.md) and [03-WORKED-CHANGE](03-WORKED-CHANGE.md) — the
+   tuple invariant and the diff (compare against `snapshots/`, which hold the
+   *pre-change* handlers).
+3. [04-TESTING-AND-DEBUGGING](04-TESTING-AND-DEBUGGING.md) — which suites exist and
+   which actually run.
+4. [05-PRACTICE](05-PRACTICE.md), then [06-SOLUTIONS-AND-REVIEW](06-SOLUTIONS-AND-REVIEW.md)
+   (06 also holds verified review findings the lab did not fix).
+5. [07-TRACE-LAB](07-TRACE-LAB.md) and [VERIFICATION](VERIFICATION.md).
+6. Then the follow-on [course/](course/LEARNING-PATH.md) on time and concurrency.
+
+Read 06's findings before trusting the word "anonymous" above: the endpoints
+are `[AllowAnonymous]`, but the tenant is read only from a JWT claim, so a
+request without a token never reaches the guard this lab adds.
 
 The [harness](../tests/NetCalendy.ScopeHarness/Program.cs) compiles production
 source into a dependency-free .NET 10 executable. The application still targets

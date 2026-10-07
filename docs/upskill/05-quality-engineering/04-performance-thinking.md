@@ -12,7 +12,7 @@ Before optimizing anything, answer:
 
 ## Hotspot 1: `GetAvailableSlots` — In-Memory Conflict Filtering
 
-**File:** [`src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs`](../../src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs)
+**File:** [`src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs`](../../../src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs)
 
 **What it does:** Loads all bookings for a host within a date range, then filters in application memory to find free slots.
 
@@ -130,7 +130,7 @@ var conflicts = await db.Bookings
 return conflicts.Count > 0; // bool check
 ```
 
-**Pattern reference:** [`src/NetCalendy.Infrastructure/Persistence/Configurations/BookingConfiguration.cs`](../../src/NetCalendy.Infrastructure/Persistence/Configurations/BookingConfiguration.cs)
+**Pattern reference:** [`src/NetCalendy.Infrastructure/Persistence/Configurations/BookingConfiguration.cs`](../../../src/NetCalendy.Infrastructure/Persistence/Configurations/BookingConfiguration.cs)
 
 ---
 
@@ -141,7 +141,7 @@ return conflicts.Count > 0; // bool check
 - [ ] Does the handler do work in-memory that could be done in SQL?
 - [ ] Does the endpoint load full entities when only IDs/counts are needed?
 - [ ] Are database indexes defined for the columns used in `.Where()` filters?
-  - See existing indexes in [`src/NetCalendy.Infrastructure/Persistence/Configurations/`](../../src/NetCalendy.Infrastructure/Persistence/Configurations/)
+  - See existing indexes in [`src/NetCalendy.Infrastructure/Persistence/Configurations/`](../../../src/NetCalendy.Infrastructure/Persistence/Configurations/)
   - Common need: `(tenant_id, host_id)` on bookings for host queries
 
 ---

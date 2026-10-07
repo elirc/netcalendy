@@ -128,6 +128,11 @@ method, this domain's stakes: start **two independent API processes** against
 one Postgres (Testcontainers), seed one host with one free slot, fire N
 simultaneous `POST /api/bookings` for that slot across both processes, assert
 exactly one 201, N-1 409s, and exactly one non-cancelled row in `bookings`.
+Two prerequisites the current code imposes: send a bearer token with a
+`tenant_id` claim (`JwtTokenFactory`), because token-less requests 500 (see
+[06 finding A](../06-SOLUTIONS-AND-REVIEW.md)); and expect today's losers to
+get **400**, not 409, until you also fix the `ResultExtensions.cs:28` mapping
+(06 finding B) — make that the first commit of this exercise.
 *Predict first, in writing:* against current code, how often does it
 oversell? (It will not fail every run — and a sometimes-failing test is the
 scarier result; say why.)

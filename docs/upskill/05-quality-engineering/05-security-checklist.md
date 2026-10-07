@@ -15,7 +15,7 @@ Tied to real code in this repo. For each item: find the relevant file, understan
 | `GET /api/event-types/{id}` | `[Authorize]` | **Potentially wrong** — public booking flow needs to view event types |
 | `GET /api/schedules/available-slots` | Check file | Verify |
 
-**How to verify:** Read [`src/NetCalendy.Api/Controllers/`](../../src/NetCalendy.Api/Controllers/) — every `[HttpGet]`, `[HttpPost]`, etc. should have either `[Authorize]` (inherited from class) or an explicit `[AllowAnonymous]` if public access is intended.
+**How to verify:** Read [`src/NetCalendy.Api/Controllers/`](../../../src/NetCalendy.Api/Controllers/) — every `[HttpGet]`, `[HttpPost]`, etc. should have either `[Authorize]` (inherited from class) or an explicit `[AllowAnonymous]` if public access is intended.
 
 **Rule for review:** If you can't explain *why* an endpoint is public, it should require auth.
 
@@ -23,7 +23,7 @@ Tied to real code in this repo. For each item: find the relevant file, understan
 
 ## 2. IDOR: Tenant Scope on All Get-By-ID Calls
 
-**Current risk (RISK-001):** [`src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs`](../../src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs) — `GetByIdAsync` queries by ID only, no tenant filter.
+**Current risk (RISK-001):** [`src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs`](../../../src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs) — `GetByIdAsync` queries by ID only, no tenant filter.
 
 **Proof of concept:**
 - Tenant A creates a booking with `bookingId = abc-123`
@@ -45,7 +45,7 @@ if (entity.TenantId != TenantId.From(currentTenant.TenantId!.Value))
 
 ## 3. Broken Object Level Authorization: Ownership on Updates
 
-**Current state:** `UpdateEventTypeHandler` and `DeleteEventTypeHandler` check that `et.OwnerId == currentUser.UserId` before allowing changes. See [`src/NetCalendy.Application/EventTypes/Commands/UpdateEventType/UpdateEventTypeHandler.cs`](../../src/NetCalendy.Application/EventTypes/Commands/UpdateEventType/UpdateEventTypeHandler.cs).
+**Current state:** `UpdateEventTypeHandler` and `DeleteEventTypeHandler` check that `et.OwnerId == currentUser.UserId` before allowing changes. See [`src/NetCalendy.Application/EventTypes/Commands/UpdateEventType/UpdateEventTypeHandler.cs`](../../../src/NetCalendy.Application/EventTypes/Commands/UpdateEventType/UpdateEventTypeHandler.cs).
 
 **Risk:** Any new update/delete handler that forgets this check. It's a per-handler convention, not enforced by the framework.
 
@@ -61,7 +61,7 @@ if (entity.TenantId != TenantId.From(currentTenant.TenantId!.Value))
 
 ## 4. Input Validation: No Trust of User-Supplied Strings
 
-**Timezone strings (RISK-002):** [`src/NetCalendy.Domain/Users/Invitee.cs`](../../src/NetCalendy.Domain/Users/Invitee.cs) stores timezone as a string. `TimeZoneInfo.FindSystemTimeZoneById(timezone)` throws `TimeZoneNotFoundException` on Windows for IANA names ("America/New_York") and on Linux for Windows names ("Eastern Standard Time").
+**Timezone strings (RISK-002):** [`src/NetCalendy.Domain/Bookings/Invitee.cs`](../../../src/NetCalendy.Domain/Bookings/Invitee.cs) stores timezone as a string. `TimeZoneInfo.FindSystemTimeZoneById(timezone)` throws `TimeZoneNotFoundException` on Windows for IANA names ("America/New_York") and on Linux for Windows names ("Eastern Standard Time").
 
 **Fix:**
 ```csharp
@@ -83,7 +83,7 @@ Or use the `TimeZoneConverter` NuGet package for cross-platform IANA↔Windows m
 
 **Current state:**
 - Key in `appsettings.json`: `"REPLACE_WITH_A_SECRET_KEY_AT_LEAST_32_CHARS"` — placeholder that must be overridden
-- No `ValidateIssuer` or `ValidateAudience` in current config (see [`src/NetCalendy.Api/Program.cs`](../../src/NetCalendy.Api/Program.cs))
+- No `ValidateIssuer` or `ValidateAudience` in current config (see [`src/NetCalendy.Api/Program.cs`](../../../src/NetCalendy.Api/Program.cs))
 
 **Risks:**
 
@@ -138,7 +138,7 @@ builder.Services.AddRateLimiter(options =>
 
 **Current state:** Serilog is configured to structured-log requests. If request bodies are logged (not the default), invitee email addresses would appear in logs.
 
-**Check:** [`src/NetCalendy.Api/Program.cs`](../../src/NetCalendy.Api/Program.cs) — does Serilog log request bodies?
+**Check:** [`src/NetCalendy.Api/Program.cs`](../../../src/NetCalendy.Api/Program.cs) — does Serilog log request bodies?
 
 **Rule:** Never log PII (emails, names, phone numbers) at Info level. Use `{Email:l}` destructuring carefully, or scrub before logging.
 

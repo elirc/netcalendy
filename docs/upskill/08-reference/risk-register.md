@@ -12,7 +12,7 @@ Last reviewed: 2026-06-08
 **Status:** Open
 
 **Location:**  
-[`src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs`](../../src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs) — `GetByIdAsync` queries by ID only.
+[`src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs`](../../../src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs) — `GetByIdAsync` queries by ID only.
 
 Affected handlers: `GetBookingHandler`, `GetEventTypeHandler`, `GetScheduleHandler`.
 
@@ -53,9 +53,9 @@ public async Task GetBooking_WithDifferentTenantToken_Returns404()
 **Status:** Open
 
 **Location:**  
-[`src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs`](../../src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs) — `TimeZoneInfo.FindSystemTimeZoneById(timezone)`.
+[`src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs`](../../../src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs) — `TimeZoneInfo.FindSystemTimeZoneById(timezone)`.
 
-Also: [`src/NetCalendy.Domain/Users/Invitee.cs`](../../src/NetCalendy.Domain/Users/Invitee.cs) — stores timezone string without format validation.
+Also: [`src/NetCalendy.Domain/Bookings/Invitee.cs`](../../../src/NetCalendy.Domain/Bookings/Invitee.cs) — stores timezone string without format validation.
 
 **Impact:**  
 On Windows, `TimeZoneInfo.FindSystemTimeZoneById("America/New_York")` (IANA format) throws `TimeZoneNotFoundException`. On Linux/Docker, `FindSystemTimeZoneById("Eastern Standard Time")` (Windows format) throws. Production containers are typically Linux — any user who uses Windows timezone IDs from a Windows client gets a 500.
@@ -82,7 +82,7 @@ public void GetAvailableSlots_WithValidTimezone_Succeeds(string tz) { ... }
 **Status:** Open
 
 **Location:**  
-[`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs:30`](../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs#L30) — conflict check and INSERT are not atomic.
+[`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs:30`](../../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs#L30) — conflict check and INSERT are not atomic.
 
 **Impact:**  
 Two simultaneous `POST /api/bookings` requests for the same host + time slot both pass the conflict check and both succeed. The host is double-booked. Probability increases with load.
@@ -121,7 +121,7 @@ responses.Count(r => r.StatusCode == HttpStatusCode.Conflict).Should().Be(9);
 **Status:** Accepted (for now)
 
 **Location:**  
-[`src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs:42`](../../src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs#L42) — `publisher.Publish(domainEvent)` succeeds with no handlers (MediatR no-ops).
+[`src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs:42`](../../../src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs#L42) — `publisher.Publish(domainEvent)` succeeds with no handlers (MediatR no-ops).
 
 **Impact:**  
 Currently harmless — no handler exists, so the no-op is intentional scaffolding. Risk activates when a handler is added: the handler runs synchronously in the HTTP request, blocking the response, with no retry on failure.
@@ -139,7 +139,7 @@ When a handler is added, test that it runs even if the process crashes between D
 **Status:** Open
 
 **Location:**  
-[`src/NetCalendy.Api/Controllers/EventTypesController.cs`](../../src/NetCalendy.Api/Controllers/EventTypesController.cs) — class-level `[Authorize]` applies to `GET /api/event-types/{id}`.
+[`src/NetCalendy.Api/Controllers/EventTypesController.cs`](../../../src/NetCalendy.Api/Controllers/EventTypesController.cs) — class-level `[Authorize]` applies to `GET /api/event-types/{id}`.
 
 **Impact:**  
 The public booking flow needs to display event type details (name, duration, description) before a guest books. If `GET /api/event-types/{id}` requires authentication, the booking page can't load for unauthenticated guests.
@@ -157,7 +157,7 @@ Create a separate public endpoint: `GET /api/public/{tenantSlug}/{eventSlug}` wi
 **Status:** Open
 
 **Location:**  
-[`src/NetCalendy.Api/Program.cs`](../../src/NetCalendy.Api/Program.cs) — no `AddRateLimiter` configured.
+[`src/NetCalendy.Api/Program.cs`](../../../src/NetCalendy.Api/Program.cs) — no `AddRateLimiter` configured.
 
 **Impact:**  
 - `POST /api/bookings/cancel` with random tokens = brute-force attack on cancellation tokens
@@ -175,7 +175,7 @@ ASP.NET Core 8 built-in rate limiter. See TICKET-M05.
 **Status:** Open (documentation workaround only)
 
 **Location:**  
-[`src/NetCalendy.Api/appsettings.json`](../../src/NetCalendy.Api/appsettings.json): `"Key": "REPLACE_WITH_A_SECRET_KEY_AT_LEAST_32_CHARS"`
+[`src/NetCalendy.Api/appsettings.json`](../../../src/NetCalendy.Api/appsettings.json): `"Key": "REPLACE_WITH_A_SECRET_KEY_AT_LEAST_32_CHARS"`
 
 **Impact:**  
 If deployed without overriding this value, all tokens are signed with a known key. Any attacker can forge tokens for any tenant or user.

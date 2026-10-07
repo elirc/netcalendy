@@ -53,7 +53,7 @@ API imports Application (to send commands) and Infrastructure (only to register 
 
 **Must not own:** Business logic (no `if` conditions about whether a booking is valid), database queries.
 
-**The thin controller pattern:** Every controller action is: `var result = await mediator.Send(command, ct); return result.ToActionResult();`. Zero logic. See [`BookingsController.cs:19`](../../src/NetCalendy.Api/Controllers/BookingsController.cs#L19).
+**The thin controller pattern:** Every controller action is: `var result = await mediator.Send(command, ct); return result.ToActionResult();`. Zero logic. See [`BookingsController.cs:19`](../../../src/NetCalendy.Api/Controllers/BookingsController.cs#L19).
 
 ---
 

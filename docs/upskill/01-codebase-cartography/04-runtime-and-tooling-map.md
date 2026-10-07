@@ -32,9 +32,9 @@ ASP.NET Core's built-in DI container. Registrations split across:
 
 | File | What it registers |
 |---|---|
-| [`src/NetCalendy.Application/DependencyInjection.cs`](../../src/NetCalendy.Application/DependencyInjection.cs) | MediatR (assembly scan), FluentValidation (assembly scan), pipeline behaviors |
-| [`src/NetCalendy.Infrastructure/DependencyInjection.cs`](../../src/NetCalendy.Infrastructure/DependencyInjection.cs) | `AppDbContext`, repositories (scoped), `ICurrentUserService` (scoped), `ICurrentTenantService` (scoped), `IDateTimeProvider` (singleton) |
-| [`src/NetCalendy.Api/Program.cs`](../../src/NetCalendy.Api/Program.cs) | JWT auth, Serilog, CORS, Swagger, controllers |
+| [`src/NetCalendy.Application/DependencyInjection.cs`](../../../src/NetCalendy.Application/DependencyInjection.cs) | MediatR (assembly scan), FluentValidation (assembly scan), pipeline behaviors |
+| [`src/NetCalendy.Infrastructure/DependencyInjection.cs`](../../../src/NetCalendy.Infrastructure/DependencyInjection.cs) | `AppDbContext`, repositories (scoped), `ICurrentUserService` (scoped), `ICurrentTenantService` (scoped), `IDateTimeProvider` (singleton) |
+| [`src/NetCalendy.Api/Program.cs`](../../../src/NetCalendy.Api/Program.cs) | JWT auth, Serilog, CORS, Swagger, controllers |
 
 **Lifetime rules:** `AppDbContext` → scoped. Repositories → scoped (correct — they hold DbContext). `ICurrentTenantService` → scoped (correct — reads `IHttpContextAccessor` which is scoped per request). `IDateTimeProvider` → singleton (correct — no per-request state).
 
@@ -43,8 +43,8 @@ ASP.NET Core's built-in DI container. Registrations split across:
 ## Configuration System
 
 **Files:**
-- [`src/NetCalendy.Api/appsettings.json`](../../src/NetCalendy.Api/appsettings.json) — base config
-- [`src/NetCalendy.Api/appsettings.Development.json`](../../src/NetCalendy.Api/appsettings.Development.json) — dev overrides (more verbose logging)
+- [`src/NetCalendy.Api/appsettings.json`](../../../src/NetCalendy.Api/appsettings.json) — base config
+- [`src/NetCalendy.Api/appsettings.Development.json`](../../../src/NetCalendy.Api/appsettings.Development.json) — dev overrides (more verbose logging)
 
 **Secrets in config:** `appsettings.json` contains a placeholder JWT key: `"REPLACE_WITH_A_SECRET_KEY_AT_LEAST_32_CHARS"`. This must be overridden via User Secrets (`dotnet user-secrets`) or environment variables in production. **Never commit a real secret to this file.**
 
@@ -56,7 +56,7 @@ ASP.NET Core's built-in DI container. Registrations split across:
 
 **Package manager:** npm (no `pnpm-lock.yaml` or `yarn.lock`). `package.json` at `web/package.json`.
 
-**Bundler:** Vite 6.x. Config at [`web/vite.config.ts`](../../web/vite.config.ts). TypeScript paths aliased: `@/*` → `src/*`.
+**Bundler:** Vite 6.x. Config at [`web/vite.config.ts`](../../../web/vite.config.ts). TypeScript paths aliased: `@/*` → `src/*`.
 
 **Dev proxy:** Vite proxies `/api/*` to `http://localhost:5000` — no CORS issues in development.
 
@@ -82,7 +82,7 @@ JWT Bearer tokens issued externally (no auth server in this repo). Claims requir
 
 Config keys: `Jwt:Key` (HS256 symmetric), `Jwt:Issuer`, `Jwt:Audience`.
 
-**Test token factory:** [`tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs`](../../tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs) — uses the same hardcoded key as `appsettings.json`. This key **must match** between tests and the running app.
+**Test token factory:** [`tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs`](../../../tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs) — uses the same hardcoded key as `appsettings.json`. This key **must match** between tests and the running app.
 
 ---
 

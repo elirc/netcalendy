@@ -26,7 +26,7 @@ The layers are intentionally overlapping — the domain doesn't trust that the v
 
 **No auth server in this repo.** There's no login endpoint, no token generation. You need an external identity provider (Auth0, Keycloak, custom) that issues tokens with the right claims.
 
-**Test tokens:** `JwtTokenFactory.GenerateToken(userId, tenantId)` at [`tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs`](../../tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs) — uses the same key as `appsettings.json`.
+**Test tokens:** `JwtTokenFactory.GenerateToken(userId, tenantId)` at [`tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs`](../../../tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs) — uses the same key as `appsettings.json`.
 
 ---
 
@@ -66,7 +66,7 @@ This is correct behavior, but it's scattered across handlers rather than being i
 
 **Definition:** Insecure Direct Object Reference — accessing a resource by ID without verifying the caller is authorized to see it.
 
-**Current state:** `RepositoryBase.GetByIdAsync(id)` at [`RepositoryBase.cs:9`](../../src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs#L9) takes only an ID. No tenant check. No ownership check.
+**Current state:** `RepositoryBase.GetByIdAsync(id)` at [`RepositoryBase.cs:9`](../../../src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs#L9) takes only an ID. No tenant check. No ownership check.
 
 **Vulnerable endpoints:**
 - `GET /api/bookings/{id}` — `GetBookingHandler` loads by ID, no tenant scope

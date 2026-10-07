@@ -2,7 +2,7 @@
 
 ## Domain Events: The Current State
 
-Domain events are raised during aggregate state changes and dispatched via `IPublisher` (MediatR) after `SaveChanges` succeeds. See [`AppDbContext.cs:31-42`](../../src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs#L31).
+Domain events are raised during aggregate state changes and dispatched via `IPublisher` (MediatR) after `SaveChanges` succeeds. See [`AppDbContext.cs:31-42`](../../../src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs#L31).
 
 **Current handlers: none.** Events fire but nothing consumes them. This is scaffolding for future notification/webhook behavior.
 
@@ -31,7 +31,7 @@ Domain events are raised during aggregate state changes and dispatched via `IPub
 ### CancellationToken Threading
 Every handler accepts `CancellationToken ct` and passes it to every async call. This is correct. If the client disconnects, EF Core respects the token and abandons the database query.
 
-Example: [`CreateBookingHandler.cs:17`](../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs#L17) — `ct` flows from the controller through MediatR through the handler through `SaveChangesAsync`.
+Example: [`CreateBookingHandler.cs:17`](../../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs#L17) — `ct` flows from the controller through MediatR through the handler through `SaveChangesAsync`.
 
 ### ConfigureAwait
 No `ConfigureAwait(false)` in this codebase. In ASP.NET Core, this is generally fine — the ASP.NET Core synchronization context doesn't cause the classic deadlock. The classic deadlock occurs only in older ASP.NET (non-Core) or WinForms/WPF when you mix `.Result` or `.Wait()` with `async/await`.
@@ -54,7 +54,7 @@ No `IHttpClientFactory` or `HttpClient` usage in the current codebase. All opera
 
 ## The `GetAvailableSlots` Memory Load
 
-[`GetAvailableSlotsHandler.cs:38`](../../src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs#L38) loads all bookings for the host in the date range into memory. For a host with 100 bookings in the next 60 days, this is fine. For a host with 10,000 bookings, this loads 10,000 rows.
+[`GetAvailableSlotsHandler.cs:38`](../../../src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs#L38) loads all bookings for the host in the date range into memory. For a host with 100 bookings in the next 60 days, this is fine. For a host with 10,000 bookings, this loads 10,000 rows.
 
 **Current risk:** Low (new system, few bookings). **Future risk:** High if hosts use the system heavily.
 
@@ -71,4 +71,4 @@ No `IHttpClientFactory` or `HttpClient` usage in the current codebase. All opera
 | No circuit breaker for external calls | N/A (no external calls yet) | Cascading failures | Polly circuit breaker when external calls are added |
 | Concurrent booking (no DB lock) | `CreateBookingHandler.cs:30` | Double-booking | Unique partial index on `(host_id, start_time)` |
 
-Note: `EnableRetryOnFailure(3)` **is** configured in [`DependencyInjection.cs`](../../src/NetCalendy.Infrastructure/DependencyInjection.cs) — Npgsql will retry transient errors up to 3 times before failing.
+Note: `EnableRetryOnFailure(3)` **is** configured in [`DependencyInjection.cs`](../../../src/NetCalendy.Infrastructure/DependencyInjection.cs) — Npgsql will retry transient errors up to 3 times before failing.

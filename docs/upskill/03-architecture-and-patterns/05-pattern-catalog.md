@@ -10,9 +10,9 @@
 
 **General shape:** Every operation that can fail returns `Result<T>` (or `Result` for void). Callers check `IsFailure` before accessing `Value`. Errors carry a `Code` and `Description`.
 
-**Real example:** [`src/NetCalendy.Domain/Common/Result.cs`](../../src/NetCalendy.Domain/Common/Result.cs) — constructor enforces the invariant: success + error is illegal.
+**Real example:** [`src/NetCalendy.Domain/Common/Result.cs`](../../../src/NetCalendy.Domain/Common/Result.cs) — constructor enforces the invariant: success + error is illegal.
 
-**Second:** [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs:23`](../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs#L23) — early return pattern: `if (eventType is null) return Result.Failure<...>(Error.NotFound(...))`.
+**Second:** [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs:23`](../../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs#L23) — early return pattern: `if (eventType is null) return Result.Failure<...>(Error.NotFound(...))`.
 
 **Why it works:** All failure modes are visible in the method signature. Callers cannot ignore failures. No exception overhead for expected failure paths.
 
@@ -34,9 +34,9 @@
 
 **General shape:** Constructor is `private`. A static `Create(...)` factory method validates inputs, calls the constructor, raises domain events, and returns `Result<T>`.
 
-**Real example:** [`src/NetCalendy.Domain/Bookings/Booking.cs:17`](../../src/NetCalendy.Domain/Bookings/Booking.cs#L17) — private constructor at line 17; public `Create` at line 37.
+**Real example:** [`src/NetCalendy.Domain/Bookings/Booking.cs:17`](../../../src/NetCalendy.Domain/Bookings/Booking.cs#L17) — private constructor at line 17; public `Create` at line 37.
 
-**Second:** [`src/NetCalendy.Domain/Tenants/Tenant.cs:14`](../../src/NetCalendy.Domain/Tenants/Tenant.cs#L14)
+**Second:** [`src/NetCalendy.Domain/Tenants/Tenant.cs:14`](../../../src/NetCalendy.Domain/Tenants/Tenant.cs#L14)
 
 **Why it works:** Invariants are enforced at the only creation site. Domain events are guaranteed to fire. Test code must use the factory, so tests exercise the same path as production.
 
@@ -57,9 +57,9 @@
 
 **General shape:** Inherit from `ValueObject`. Override `GetEqualityComponents()`. Immutable properties only.
 
-**Real example:** [`src/NetCalendy.Domain/Users/Email.cs`](../../src/NetCalendy.Domain/Users/Email.cs) — `Value` property, static `Create` with normalization, `GetEqualityComponents` yields `Value`.
+**Real example:** [`src/NetCalendy.Domain/Users/Email.cs`](../../../src/NetCalendy.Domain/Users/Email.cs) — `Value` property, static `Create` with normalization, `GetEqualityComponents` yields `Value`.
 
-**Second:** [`src/NetCalendy.Domain/Schedules/TimeRange.cs`](../../src/NetCalendy.Domain/Schedules/TimeRange.cs)
+**Second:** [`src/NetCalendy.Domain/Schedules/TimeRange.cs`](../../../src/NetCalendy.Domain/Schedules/TimeRange.cs)
 
 **Why it works:** Two independent `Email.Create("Alice@Example.COM")` calls produce equal objects. Safe to use as dictionary keys. Normalization (lowercased) lives in one place.
 
@@ -77,7 +77,7 @@
 
 **General shape:** `record TenantId(Guid Value)` with `New()` and `From(Guid)` factory methods.
 
-**Real example:** [`src/NetCalendy.Domain/Tenants/TenantId.cs`](../../src/NetCalendy.Domain/Tenants/TenantId.cs) — also see EF value converter in [`TenantConfiguration.cs:10`](../../src/NetCalendy.Infrastructure/Persistence/Configurations/TenantConfiguration.cs#L10).
+**Real example:** [`src/NetCalendy.Domain/Tenants/TenantId.cs`](../../../src/NetCalendy.Domain/Tenants/TenantId.cs) — also see EF value converter in [`TenantConfiguration.cs:10`](../../../src/NetCalendy.Infrastructure/Persistence/Configurations/TenantConfiguration.cs#L10).
 
 **Why it works:** `UpdateUser(UserId id, TenantId tenantId)` is impossible to call with the arguments swapped.
 
@@ -95,9 +95,9 @@
 
 **General shape:** Command is a `record` implementing `IRequest<Result<TResponse>>`. Handler implements `IRequestHandler<TCommand, TResult>`. MediatR routes by type.
 
-**Real example:** [`src/NetCalendy.Application/EventTypes/Commands/CreateEventType/CreateEventTypeCommand.cs`](../../src/NetCalendy.Application/EventTypes/Commands/CreateEventType/CreateEventTypeCommand.cs) — command + response in one file.
+**Real example:** [`src/NetCalendy.Application/EventTypes/Commands/CreateEventType/CreateEventTypeCommand.cs`](../../../src/NetCalendy.Application/EventTypes/Commands/CreateEventType/CreateEventTypeCommand.cs) — command + response in one file.
 
-**Second:** [`src/NetCalendy.Application/EventTypes/Commands/CreateEventType/CreateEventTypeHandler.cs`](../../src/NetCalendy.Application/EventTypes/Commands/CreateEventType/CreateEventTypeHandler.cs)
+**Second:** [`src/NetCalendy.Application/EventTypes/Commands/CreateEventType/CreateEventTypeHandler.cs`](../../../src/NetCalendy.Application/EventTypes/Commands/CreateEventType/CreateEventTypeHandler.cs)
 
 **Why it works:** Each handler is a single-responsibility unit. Test in isolation with mocked dependencies. Add new behavior by adding a new handler, not modifying existing ones.
 
@@ -115,11 +115,11 @@
 
 **General shape:** `IPipelineBehavior<TRequest, TResponse>` wraps the handler call. Registered in DI in order.
 
-**Real example:** [`src/NetCalendy.Application/Common/Behaviors/ValidationBehavior.cs`](../../src/NetCalendy.Application/Common/Behaviors/ValidationBehavior.cs) — collects all `IValidator<TRequest>` instances, runs them, throws on failures.
+**Real example:** [`src/NetCalendy.Application/Common/Behaviors/ValidationBehavior.cs`](../../../src/NetCalendy.Application/Common/Behaviors/ValidationBehavior.cs) — collects all `IValidator<TRequest>` instances, runs them, throws on failures.
 
-**Second:** [`src/NetCalendy.Application/Common/Behaviors/LoggingBehavior.cs`](../../src/NetCalendy.Application/Common/Behaviors/LoggingBehavior.cs)
+**Second:** [`src/NetCalendy.Application/Common/Behaviors/LoggingBehavior.cs`](../../../src/NetCalendy.Application/Common/Behaviors/LoggingBehavior.cs)
 
-**Registration order:** [`DependencyInjection.cs:13-14`](../../src/NetCalendy.Application/DependencyInjection.cs#L13) — `LoggingBehavior` before `ValidationBehavior`. This means: log the request → validate → execute handler → log completion.
+**Registration order:** [`DependencyInjection.cs:13-14`](../../../src/NetCalendy.Application/DependencyInjection.cs#L13) — `LoggingBehavior` before `ValidationBehavior`. This means: log the request → validate → execute handler → log completion.
 
 **Failure modes:**
 - `ValidationBehavior` throws `FluentValidation.ValidationException`. If `ExceptionHandlingMiddleware` is not in the pipeline, this bubbles as a 500.
@@ -133,9 +133,9 @@
 
 **General shape:** Interface in Domain (`IBookingRepository`). Implementation in Infrastructure (`BookingRepository`). Base class handles common CRUD (`RepositoryBase<T, TId>`).
 
-**Real example:** [`src/NetCalendy.Domain/Repositories/IBookingRepository.cs`](../../src/NetCalendy.Domain/Repositories/IBookingRepository.cs) — interface.
+**Real example:** [`src/NetCalendy.Domain/Repositories/IBookingRepository.cs`](../../../src/NetCalendy.Domain/Repositories/IBookingRepository.cs) — interface.
 
-**Second:** [`src/NetCalendy.Infrastructure/Persistence/Repositories/BookingRepository.cs`](../../src/NetCalendy.Infrastructure/Persistence/Repositories/BookingRepository.cs) — implementation.
+**Second:** [`src/NetCalendy.Infrastructure/Persistence/Repositories/BookingRepository.cs`](../../../src/NetCalendy.Infrastructure/Persistence/Repositories/BookingRepository.cs) — implementation.
 
 **Why it works:** Application tests can use `NSubstitute` to mock the repository without needing a database.
 
@@ -151,9 +151,9 @@
 
 **General shape:** `IUnitOfWork.SaveChangesAsync()` flushes all pending changes from the EF change tracker in one transaction.
 
-**Real example:** [`src/NetCalendy.Application/Common/IUnitOfWork.cs`](../../src/NetCalendy.Application/Common/IUnitOfWork.cs) — single-method interface.
+**Real example:** [`src/NetCalendy.Application/Common/IUnitOfWork.cs`](../../../src/NetCalendy.Application/Common/IUnitOfWork.cs) — single-method interface.
 
-**Second:** [`src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs:31`](../../src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs#L31) — implementation in `AppDbContext`.
+**Second:** [`src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs:31`](../../../src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs#L31) — implementation in `AppDbContext`.
 
 **Why it works:** `AppDbContext` is scoped per request. All repositories injected in the same request share the same `DbContext` instance — so one `SaveChangesAsync()` commits all their changes.
 
@@ -169,9 +169,9 @@
 
 **General shape:** `builder.OwnsOne(e => e.Duration, d => d.Property(x => x.Minutes).HasColumnName(...))` for single-value VOs. `builder.OwnsMany(s => s.Rules, rules => { ... })` for collections.
 
-**Real example:** [`src/NetCalendy.Infrastructure/Persistence/Configurations/BookingConfiguration.cs:40`](../../src/NetCalendy.Infrastructure/Persistence/Configurations/BookingConfiguration.cs#L40) — `Invitee` mapped via `OwnsOne`.
+**Real example:** [`src/NetCalendy.Infrastructure/Persistence/Configurations/BookingConfiguration.cs:40`](../../../src/NetCalendy.Infrastructure/Persistence/Configurations/BookingConfiguration.cs#L40) — `Invitee` mapped via `OwnsOne`.
 
-**Second:** [`src/NetCalendy.Infrastructure/Persistence/Configurations/ScheduleConfiguration.cs:33`](../../src/NetCalendy.Infrastructure/Persistence/Configurations/ScheduleConfiguration.cs#L33) — `Rules` mapped via `OwnsMany` to `schedule_rules` table.
+**Second:** [`src/NetCalendy.Infrastructure/Persistence/Configurations/ScheduleConfiguration.cs:33`](../../../src/NetCalendy.Infrastructure/Persistence/Configurations/ScheduleConfiguration.cs#L33) — `Rules` mapped via `OwnsMany` to `schedule_rules` table.
 
 **Failure modes:**
 - Forgetting `OwnsOne/Many` — EF Core will create a separate table with an automatically-generated key, or silently fail to persist.
@@ -185,9 +185,9 @@
 
 **General shape:** Every repository query includes a `TenantId` filter parameter. Optionally: EF global query filters.
 
-**Real example:** [`src/NetCalendy.Infrastructure/Persistence/Repositories/EventTypeRepository.cs:12`](../../src/NetCalendy.Infrastructure/Persistence/Repositories/EventTypeRepository.cs#L12) — `Where(e => e.OwnerId == ownerId && e.TenantId == tenantId)`.
+**Real example:** [`src/NetCalendy.Infrastructure/Persistence/Repositories/EventTypeRepository.cs:12`](../../../src/NetCalendy.Infrastructure/Persistence/Repositories/EventTypeRepository.cs#L12) — `Where(e => e.OwnerId == ownerId && e.TenantId == tenantId)`.
 
-**Second:** [`src/NetCalendy.Infrastructure/Persistence/Repositories/BookingRepository.cs:22`](../../src/NetCalendy.Infrastructure/Persistence/Repositories/BookingRepository.cs#L22) — `ListByHostAsync` filters by `tenantId`.
+**Second:** [`src/NetCalendy.Infrastructure/Persistence/Repositories/BookingRepository.cs:22`](../../../src/NetCalendy.Infrastructure/Persistence/Repositories/BookingRepository.cs#L22) — `ListByHostAsync` filters by `tenantId`.
 
 **Failure modes:**
 - `GetById` in `RepositoryBase` does NOT filter by tenant — it loads by primary key only. A caller who knows another tenant's booking ID can retrieve it. This is a real vulnerability (see risk register RISK-001).
@@ -201,7 +201,7 @@
 
 **General shape:** First middleware in the pipeline. Catches `ValidationException` → 400, all others → 500. Logs the exception.
 
-**Real example:** [`src/NetCalendy.Api/Middleware/ExceptionHandlingMiddleware.cs`](../../src/NetCalendy.Api/Middleware/ExceptionHandlingMiddleware.cs)
+**Real example:** [`src/NetCalendy.Api/Middleware/ExceptionHandlingMiddleware.cs`](../../../src/NetCalendy.Api/Middleware/ExceptionHandlingMiddleware.cs)
 
 **Failure modes:**
 - Exceptions thrown by response-writing code after `await next()` may be swallowed silently since the response is already started.
@@ -215,7 +215,7 @@
 
 **General shape:** `ICurrentUserService` and `ICurrentTenantService` read from `IHttpContextAccessor`. Registered scoped. Injected into handlers.
 
-**Real example:** [`src/NetCalendy.Infrastructure/Services/CurrentTenantService.cs`](../../src/NetCalendy.Infrastructure/Services/CurrentTenantService.cs)
+**Real example:** [`src/NetCalendy.Infrastructure/Services/CurrentTenantService.cs`](../../../src/NetCalendy.Infrastructure/Services/CurrentTenantService.cs)
 
 **Failure modes:**
 - If used outside of an HTTP request (background job, test without request context), `HttpContext` is null — `TenantId` returns null and the handler throws.
@@ -229,7 +229,7 @@
 
 **General shape:** One `AbstractValidator<TCommand>` per command, in the same folder as the command.
 
-**Real example:** [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs`](../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs)
+**Real example:** [`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs`](../../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingValidator.cs)
 
 **Failure modes:**
 - Two validation layers (FV + domain factory) checking the same rule inconsistently — e.g., FV allows 500 chars for a field that the domain allows 480.
@@ -243,7 +243,7 @@
 
 **General shape:** Aggregate calls `RaiseDomainEvent(event)` during state changes. `AppDbContext.SaveChangesAsync` collects all pending events, saves to DB, then dispatches via `IPublisher`.
 
-**Real example:** [`src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs:31-42`](../../src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs#L31)
+**Real example:** [`src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs:31-42`](../../../src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs#L31)
 
 **Failure modes:**
 - If `publisher.Publish` throws (e.g., no handler found throws), the exception propagates after the database write already succeeded. The state is saved but the side effect never ran. There's no retry/outbox.
@@ -257,7 +257,7 @@
 
 **General shape:** `useQuery({ queryKey, queryFn })` for reads. `useMutation({ mutationFn, onSuccess: qc.invalidateQueries(...) })` for writes.
 
-**Real example:** [`web/src/hooks/useEventTypes.ts`](../../web/src/hooks/useEventTypes.ts) — `useEventTypes`, `useDeleteEventType`, `useCreateEventType`.
+**Real example:** [`web/src/hooks/useEventTypes.ts`](../../../web/src/hooks/useEventTypes.ts) — `useEventTypes`, `useDeleteEventType`, `useCreateEventType`.
 
 **Failure modes:**
 - Stale cache: if `queryKey` doesn't change when the underlying data changes, React Query returns cached data forever.
@@ -271,7 +271,7 @@
 
 **General shape:** Single `step` state variable with typed values (`'pick-slot' | 'fill-form' | 'confirmed'`). Render returns different JSX based on step. Transitions are explicit `setStep(...)` calls.
 
-**Real example:** [`web/src/components/booking/BookingPage.tsx:20-26`](../../web/src/components/booking/BookingPage.tsx#L20)
+**Real example:** [`web/src/components/booking/BookingPage.tsx:20-26`](../../../web/src/components/booking/BookingPage.tsx#L20)
 
 **Failure modes:**
 - Back button in browser doesn't mirror the step state — pressing browser back while on 'fill-form' routes away entirely instead of going to 'pick-slot'.
@@ -284,7 +284,7 @@
 
 **General shape:** `IAsyncLifetime` class starts a Docker container in `InitializeAsync`, exposes the connection string, stops in `DisposeAsync`. `WebApplicationFactory.ConfigureWebHost` overrides the DI registration.
 
-**Real example:** [`tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs`](../../tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs)
+**Real example:** [`tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs`](../../../tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs)
 
 **Failure modes:**
 - No database reset between test methods in the same class — residual data can cause false negatives.
@@ -298,7 +298,7 @@
 
 **General shape:** `apiClient.interceptors.request.use(...)` injects token from localStorage. `apiClient.interceptors.response.use(_, err => ...)` handles 401.
 
-**Real example:** [`web/src/api/client.ts:7-19`](../../web/src/api/client.ts#L7)
+**Real example:** [`web/src/api/client.ts:7-19`](../../../web/src/api/client.ts#L7)
 
 **Failure modes:**
 - Token in `localStorage` is accessible to JavaScript — XSS vulnerability. HttpOnly cookies are safer.

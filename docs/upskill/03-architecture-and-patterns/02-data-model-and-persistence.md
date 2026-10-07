@@ -24,7 +24,7 @@ users.email ── (OwnsOne) Email value object
 
 ## Table and Column Mapping
 
-Every entity has a matching `IEntityTypeConfiguration<T>` in [`src/NetCalendy.Infrastructure/Persistence/Configurations/`](../../src/NetCalendy.Infrastructure/Persistence/Configurations/).
+Every entity has a matching `IEntityTypeConfiguration<T>` in [`src/NetCalendy.Infrastructure/Persistence/Configurations/`](../../../src/NetCalendy.Infrastructure/Persistence/Configurations/).
 
 ### bookings table (most complex)
 | C# property | Column | Notes |

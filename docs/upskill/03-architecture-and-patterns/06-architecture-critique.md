@@ -26,7 +26,7 @@ Each feature's Command/Handler/Validator lives in one folder. Finding the code f
 ## Risks and Tradeoffs (Prioritized)
 
 ### RISK-001: No Tenant Isolation on `GetById` — HIGH IMPACT, CONFIRMED
-**Evidence:** [`src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs:9`](../../src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs#L9) — `FindAsync([id], ct)` loads by primary key with no tenant filter.
+**Evidence:** [`src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs:9`](../../../src/NetCalendy.Infrastructure/Persistence/Repositories/RepositoryBase.cs#L9) — `FindAsync([id], ct)` loads by primary key with no tenant filter.
 
 **Impact:** Any authenticated user who knows (or guesses) another tenant's booking ID can call `GET /api/bookings/{id}` and retrieve it. This is an IDOR (Insecure Direct Object Reference) vulnerability.
 
@@ -48,7 +48,7 @@ Each feature's Command/Handler/Validator lives in one folder. Finding the code f
 ---
 
 ### RISK-003: Double-Booking Race Condition — MEDIUM IMPACT, HYPOTHESIS
-**Evidence:** [`CreateBookingHandler.cs:30`](../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs#L30) — conflict check reads existing bookings; no database-level lock taken between the read and the insert.
+**Evidence:** [`CreateBookingHandler.cs:30`](../../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs#L30) — conflict check reads existing bookings; no database-level lock taken between the read and the insert.
 
 **Impact:** Two concurrent booking requests for the same slot can both pass the conflict check and both succeed, resulting in a double-booking.
 
@@ -70,7 +70,7 @@ Each feature's Command/Handler/Validator lives in one folder. Finding the code f
 ---
 
 ### RISK-005: `[Authorize]` on Public Event Type Read — MEDIUM IMPACT, CONFIRMED
-**Evidence:** [`EventTypesController.cs:9`](../../src/NetCalendy.Api/Controllers/EventTypesController.cs#L9) — class-level `[Authorize]`. `GET /api/event-types/{id}` is on this controller with no `[AllowAnonymous]`.
+**Evidence:** [`EventTypesController.cs:9`](../../../src/NetCalendy.Api/Controllers/EventTypesController.cs#L9) — class-level `[Authorize]`. `GET /api/event-types/{id}` is on this controller with no `[AllowAnonymous]`.
 
 **Impact:** The public booking page (`BookPage.tsx`) calls this endpoint to load the event type. It will fail with 401 for unauthenticated visitors. The public booking flow is broken.
 

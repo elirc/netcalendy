@@ -35,4 +35,15 @@ than folding them into these focused handler cases.
 
 ## Accepted execution
 
-Read the [eleven-case output](evidence/crud-b02-scope-harness.log) and [command record with limits](evidence/results.json). The command compiled the selected source and exited zero. No dependency-install step is counted as a test.
+Read the [command record with limits](evidence/results.json) (dated
+2026-09-21). It names a log file, `crud-b02-scope-harness.log`, that was not
+committed; the record's `cwd` is the original staging machine's path, not a
+path in this repository. Treat the JSON as the frozen record and rerun the
+harness to see the eleven `ok -` lines yourself. The command compiled the
+selected source and exited zero. No dependency-install step is counted as a
+test.
+
+The 2026-10-02 course run ([worked example](course/worked-examples/remove-the-conflict-check.md))
+reproduced `# tests 11 / # pass 11` and additionally captured Domain.Tests at
+14/14 (with `DOTNET_ROLL_FORWARD=LatestMajor`). The Application.Tests project
+does not compile on a clean clone; see 04 for the static reason.

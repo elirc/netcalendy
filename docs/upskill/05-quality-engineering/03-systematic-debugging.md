@@ -22,7 +22,7 @@ Content-Type: application/json   ← required
 ASP.NET Core returns 400 silently if `Content-Type` is missing for `[FromBody]` parameters.
 
 Step 2 — Check `ExceptionHandlingMiddleware`.
-[`src/NetCalendy.Api/Middleware/ExceptionHandlingMiddleware.cs`](../../src/NetCalendy.Api/Middleware/ExceptionHandlingMiddleware.cs) — Does it catch `ValidationException`? Does it write a body? Look for `context.Response.WriteAsJsonAsync`.
+[`src/NetCalendy.Api/Middleware/ExceptionHandlingMiddleware.cs`](../../../src/NetCalendy.Api/Middleware/ExceptionHandlingMiddleware.cs) — Does it catch `ValidationException`? Does it write a body? Look for `context.Response.WriteAsJsonAsync`.
 
 Step 3 — Check Serilog logs. The middleware should log the exception before writing the 400. If nothing is in the logs, the exception happened before the middleware (e.g., model binding).
 
@@ -47,14 +47,14 @@ Step 4 — Enable detailed errors in dev: `appsettings.Development.json`:
 **Investigation path:**
 
 Step 1 — Verify handler registration.
-[`src/NetCalendy.Application/DependencyInjection.cs`](../../src/NetCalendy.Application/DependencyInjection.cs) — MediatR scans the Assembly. Is your handler in `NetCalendy.Application` assembly? If it's in a different project, that project's assembly must also be scanned.
+[`src/NetCalendy.Application/DependencyInjection.cs`](../../../src/NetCalendy.Application/DependencyInjection.cs) — MediatR scans the Assembly. Is your handler in `NetCalendy.Application` assembly? If it's in a different project, that project's assembly must also be scanned.
 
 Step 2 — Add a breakpoint (or log line) in `AppDbContext.SaveChangesAsync`.
-[`src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs:31`](../../src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs#L31)
+[`src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs:31`](../../../src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs#L31)
 Check: Is `domainEvents.Count > 0`? If zero, the aggregate's events aren't being found.
 
 Step 3 — Check that the aggregate implements `IHasDomainEvents`.
-[`src/NetCalendy.Domain/Common/IHasDomainEvents.cs`](../../src/NetCalendy.Domain/Common/IHasDomainEvents.cs)
+[`src/NetCalendy.Domain/Common/IHasDomainEvents.cs`](../../../src/NetCalendy.Domain/Common/IHasDomainEvents.cs)
 `ChangeTracker.Entries<IHasDomainEvents>()` will only find entities that implement this interface. The `AggregateRoot<TId>` base class implements it — so any class extending `AggregateRoot` should work.
 
 Step 4 — Check that `RaiseDomainEvent(...)` was actually called.
@@ -77,18 +77,18 @@ The aggregate's factory method (`Booking.Create`) must call `RaiseDomainEvent(ne
 **Investigation path:**
 
 Step 1 — Check `JwtTokenFactory` key.
-[`tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs`](../../tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs)
+[`tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs`](../../../tests/NetCalendy.Integration.Tests/Fixtures/JwtTokenFactory.cs)
 The key must match `appsettings.json` → `Jwt:Key`. If they diverge, JWT validation will fail silently (no error logged, just 401).
 
 Step 2 — Check JWT configuration in API.
-[`src/NetCalendy.Api/appsettings.json`](../../src/NetCalendy.Api/appsettings.json) and [`src/NetCalendy.Api/Program.cs`](../../src/NetCalendy.Api/Program.cs)
+[`src/NetCalendy.Api/appsettings.json`](../../../src/NetCalendy.Api/appsettings.json) and [`src/NetCalendy.Api/Program.cs`](../../../src/NetCalendy.Api/Program.cs)
 Look for `ValidateIssuer` and `ValidateAudience`. If set to `true` with specific values, the test token must include matching `iss` and `aud` claims.
 
 Step 3 — Decode the test token manually.
 Paste the token at [jwt.io](https://jwt.io) (use offline tools for sensitive keys). Verify claims: `sub`, `tenant_id`, `tenant_slug`, `exp`.
 
 Step 4 — Check that `WebApplicationFactory` uses the same `appsettings.json` key.
-[`tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs`](../../tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs)
+[`tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs`](../../../tests/NetCalendy.Integration.Tests/Fixtures/IntegrationTestWebAppFactory.cs)
 The factory uses `ConfigureWebHost` — does it override the JWT key? If not, it uses the real `appsettings.json` key, which must match `JwtTokenFactory`.
 
 **Likely root cause:** Key mismatch. Either `JwtTokenFactory` hardcodes a different key, or the test factory overrides app configuration in a way that changes the key.
@@ -107,15 +107,15 @@ The factory uses `ConfigureWebHost` — does it override the JWT key? If not, it
 **Investigation path:**
 
 Step 1 — Verify `ICurrentTenantService` lifetime.
-[`src/NetCalendy.Infrastructure/DependencyInjection.cs`](../../src/NetCalendy.Infrastructure/DependencyInjection.cs)
+[`src/NetCalendy.Infrastructure/DependencyInjection.cs`](../../../src/NetCalendy.Infrastructure/DependencyInjection.cs)
 `CurrentTenantService` must be **Scoped**, not Singleton. A Singleton would share state across all requests — the first request's tenant would bleed into subsequent requests.
 
 Step 2 — Trace the tenant resolution path.
-[`src/NetCalendy.Api/Middleware/TenantResolutionMiddleware.cs`](../../src/NetCalendy.Api/Middleware/TenantResolutionMiddleware.cs)
+[`src/NetCalendy.Api/Middleware/TenantResolutionMiddleware.cs`](../../../src/NetCalendy.Api/Middleware/TenantResolutionMiddleware.cs)
 The middleware stores `TenantId` in `HttpContext.Items["TenantId"]`. But `ICurrentTenantService.TenantId` reads from the **JWT claim** (`tenant_id`), not from `Items`. Confirm which one the handler uses.
 
 Step 3 — Check `CreateBookingHandler`.
-[`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs`](../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs)
+[`src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs`](../../../src/NetCalendy.Application/Bookings/Commands/CreateBooking/CreateBookingHandler.cs)
 `var tenantId = TenantId.From(currentTenant.TenantId!.Value);` — if `currentTenant.TenantId` is null, this throws. If it's the wrong value, check the JWT claims in the test token.
 
 **Likely root cause:** `ICurrentTenantService` registered as Singleton instead of Scoped, or JWT `tenant_id` claim doesn't match the `X-Tenant-Slug` header value (they resolve independently).
@@ -144,10 +144,10 @@ Step 2 — Check the EF model vs. schema.
 Run `dotnet ef migrations list` to see which migrations are pending. If there are pending migrations, the app deployed without running them.
 
 Step 3 — Check automatic migration on startup.
-[`src/NetCalendy.Infrastructure/DependencyInjection.cs`](../../src/NetCalendy.Infrastructure/DependencyInjection.cs) or `Program.cs` — does the app call `db.Database.MigrateAsync()` on startup? If it does, a startup failure (container crash before migration completes) would leave the DB in an intermediate state.
+[`src/NetCalendy.Infrastructure/DependencyInjection.cs`](../../../src/NetCalendy.Infrastructure/DependencyInjection.cs) or `Program.cs` — does the app call `db.Database.MigrateAsync()` on startup? If it does, a startup failure (container crash before migration completes) would leave the DB in an intermediate state.
 
 Step 4 — Look at the specific column mentioned.
-The column name (e.g., `Email_Value` instead of `Email`) tells you which EF owned type or value converter mapping is wrong. Check [`src/NetCalendy.Infrastructure/Persistence/Configurations/`](../../src/NetCalendy.Infrastructure/Persistence/Configurations/) for the entity's configuration.
+The column name (e.g., `Email_Value` instead of `Email`) tells you which EF owned type or value converter mapping is wrong. Check [`src/NetCalendy.Infrastructure/Persistence/Configurations/`](../../../src/NetCalendy.Infrastructure/Persistence/Configurations/) for the entity's configuration.
 
 **Likely root cause:** Code was deployed without running the corresponding migration. Fix: run `dotnet ef database update` before starting the app, or use an explicit migration runner as part of the deployment pipeline.
 

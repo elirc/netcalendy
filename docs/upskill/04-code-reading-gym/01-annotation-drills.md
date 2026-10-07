@@ -6,7 +6,7 @@ For each drill: read the file, then annotate it mentally (or in a copy) with: in
 
 ## Drill 1: `Booking.Create` factory method
 
-**File:** [`src/NetCalendy.Domain/Bookings/Booking.cs:37-55`](../../src/NetCalendy.Domain/Bookings/Booking.cs#L37)
+**File:** [`src/NetCalendy.Domain/Bookings/Booking.cs:37-55`](../../../src/NetCalendy.Domain/Bookings/Booking.cs#L37)
 
 Read lines 37–55. For each, annotate:
 - What are the **inputs**? What types?
@@ -30,7 +30,7 @@ Read lines 37–55. For each, annotate:
 
 ## Drill 2: `ValidationBehavior<TRequest, TResponse>`
 
-**File:** [`src/NetCalendy.Application/Common/Behaviors/ValidationBehavior.cs`](../../src/NetCalendy.Application/Common/Behaviors/ValidationBehavior.cs)
+**File:** [`src/NetCalendy.Application/Common/Behaviors/ValidationBehavior.cs`](../../../src/NetCalendy.Application/Common/Behaviors/ValidationBehavior.cs)
 
 Annotate:
 - **Inputs:** What does the behavior receive?
@@ -53,7 +53,7 @@ Annotate:
 
 ## Drill 3: `AppDbContext.SaveChangesAsync`
 
-**File:** [`src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs:31-50`](../../src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs#L31)
+**File:** [`src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs:31-50`](../../../src/NetCalendy.Infrastructure/Persistence/AppDbContext.cs#L31)
 
 Annotate:
 - **Inputs:** What entities are in scope? (Hint: everything the change tracker knows about)
@@ -76,7 +76,7 @@ Annotate:
 
 ## Drill 4: `GetAvailableSlotsHandler`
 
-**File:** [`src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs`](../../src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs)
+**File:** [`src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs`](../../../src/NetCalendy.Application/Schedules/Queries/GetAvailableSlots/GetAvailableSlotsHandler.cs)
 
 Annotate:
 - **Dependencies:** Which repositories are injected?
@@ -99,7 +99,7 @@ Annotate:
 
 ## Drill 5: `TenantResolutionMiddleware`
 
-**File:** [`src/NetCalendy.Api/Middleware/TenantResolutionMiddleware.cs`](../../src/NetCalendy.Api/Middleware/TenantResolutionMiddleware.cs)
+**File:** [`src/NetCalendy.Api/Middleware/TenantResolutionMiddleware.cs`](../../../src/NetCalendy.Api/Middleware/TenantResolutionMiddleware.cs)
 
 Annotate:
 - **When it runs:** Before or after auth middleware?
@@ -121,7 +121,7 @@ Annotate:
 
 ## Drill 6: `ResultExtensions.ToActionResult`
 
-**File:** [`src/NetCalendy.Api/Extensions/ResultExtensions.cs`](../../src/NetCalendy.Api/Extensions/ResultExtensions.cs)
+**File:** [`src/NetCalendy.Api/Extensions/ResultExtensions.cs`](../../../src/NetCalendy.Api/Extensions/ResultExtensions.cs)
 
 Annotate:
 - **Input:** `Result` and `Result<T>` — what's the difference?
@@ -143,7 +143,7 @@ Annotate:
 
 ## Drill 7: `BookingAggregateTests`
 
-**File:** [`tests/NetCalendy.Domain.Tests/BookingTests/BookingAggregateTests.cs`](../../tests/NetCalendy.Domain.Tests/BookingTests/BookingAggregateTests.cs)
+**File:** [`tests/NetCalendy.Domain.Tests/BookingTests/BookingAggregateTests.cs`](../../../tests/NetCalendy.Domain.Tests/BookingTests/BookingAggregateTests.cs)
 
 Annotate:
 - **Test naming:** Describe the naming convention used. What does each test name tell you?
@@ -165,7 +165,7 @@ Annotate:
 
 ## Drill 8: `BookingPage.tsx` Form Submission
 
-**File:** [`web/src/components/booking/BookingPage.tsx:28-42`](../../web/src/components/booking/BookingPage.tsx#L28)
+**File:** [`web/src/components/booking/BookingPage.tsx:28-42`](../../../web/src/components/booking/BookingPage.tsx#L28)
 
 Annotate:
 - **State managed:** List each `useState` variable and its type
